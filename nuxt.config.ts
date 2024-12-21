@@ -37,7 +37,11 @@ export default defineNuxtConfig({
 
   nitro: {
     compressPublicAssets: true,
+     prerender: {
+      routes: [] // Hiçbir route prerender edilmez
+    }
   },
+  
 
   routeRules: {
     // SPA geçişleri için
