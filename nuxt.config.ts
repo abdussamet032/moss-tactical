@@ -39,7 +39,8 @@ export default defineNuxtConfig({
     compressPublicAssets: true,
      prerender: {
       routes: [] // Hiçbir route prerender edilmez
-    }
+     },
+     preset: 'cloudflare'
   },
   
 
