@@ -10,10 +10,8 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "file-saver": "^2.0.5",
     "maska": "^2.1.11",
     "nuxt": "^3.14.1592",
-    "papaparse": "^5.4.1",
     "vue": "latest",
     "vue-router": "latest"
   },
@@ -24,7 +22,6 @@
     "@nuxt/image": "^1.8.1",
     "@nuxtjs/supabase": "^1.4.4",
     "@nuxtjs/tailwindcss": "^6.12.2",
-    "@types/file-saver": "^2.0.7",
     "@types/papaparse": "^5.3.15",
     "i": "^0.3.7"
   }
