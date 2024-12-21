@@ -1,17 +1,19 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
+
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/supabase',
     '@nuxt/image',
     'nuxt-icon',
   ],
+
   plugins: [
     { src: '~/plugins/maska.client.ts', mode: 'client' }
   ],
-    css: ['~/assets/css/main.css'],
 
-  
+  css: ['~/assets/css/main.css'],
+
   app: {
     head: {
       charset: 'utf-8',
@@ -50,4 +52,6 @@ export default defineNuxtConfig({
     exposeConfig: false,
     viewer: true,
   },
-}) 
+
+  compatibilityDate: '2024-12-21',
+})

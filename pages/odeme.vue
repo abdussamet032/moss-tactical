@@ -155,17 +155,9 @@
 
                         <!-- Ödeme Butonu -->
                         <button @click="handlePayment"
-                            class="w-full mt-6 bg-primary-600 text-white py-3 rounded-lg font-medium hover:bg-primary-700 transition"
-                            :disabled="processing">
-                            {{ processing ? 'İşleniyor...' : 'Ödemeyi Tamamla' }}
+                            class="w-full mt-6 bg-primary-600 text-white py-3 rounded-lg font-medium hover:bg-primary-700 transition">
+                            Ödemeyi Tamamla
                         </button>
-
-                        <!-- Hata Mesajları -->
-                        <div v-if="errors.length" class="mt-4 p-3 bg-red-50 text-red-600 rounded-lg">
-                            <p v-for="error in errors" :key="error" class="text-sm">
-                                {{ error }}
-                            </p>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -177,11 +169,8 @@
 import { vMaska } from 'maska'
 
 const router = useRouter()
-const { cart, cartTotal, clearCart } = useCart()
-const { checkoutForm, validateForm, processPayment } = useCheckout()
-
-const processing = ref(false)
-const errors = ref([])
+const { cart, cartTotal } = useCart()
+const { checkoutForm } = useCheckout()
 
 // Fiyat formatla
 const formatPrice = (price: number) => {
@@ -191,41 +180,12 @@ const formatPrice = (price: number) => {
     }).format(price)
 }
 
-// Ödeme işlemi
-const handlePayment = async () => {
-    processing.value = true
-    errors.value = []
-
-    try {
-        const result = await processPayment()
-
-        if (result.success) {
-            // Sepeti temizle
-            clearCart()
-
-            // Başarılı sayfasına yönlendir
-            router.push({
-                path: '/siparis-basarili',
-                query: {
-                    orderId: result.orderId
-                }
-            })
-        } else {
-            errors.value = result.errors
-        }
-    } catch (error) {
-        errors.value = ['Beklenmeyen bir hata oluştu']
-    } finally {
-        processing.value = false
-    }
+// Basitleştirilmiş ödeme işlemi
+const handlePayment = () => {
+    alert('Ödeme sistemi henüz aktif değildir.')
 }
 
-// Sepet boşsa ana sayfaya yönlendir
-onMounted(() => {
-    if (!cart.value.length) {
-        router.push('/')
-    }
-})
+
 
 // SEO
 useHead({
@@ -237,15 +197,6 @@ useHead({
         }
     ]
 })
-
-// Input maskeleri için kurallar
-const masks = {
-    phone: '(###) ### ## ##',
-    cardNumber: '#### #### #### ####',
-    cardExpiry: '##/##',
-    cardCVC: '###',
-    zipCode: '#####'
-}
 </script>
 
 <style scoped>
