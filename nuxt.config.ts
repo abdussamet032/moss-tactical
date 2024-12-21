@@ -40,7 +40,10 @@ export default defineNuxtConfig({
         prerender: {
             routes: [] // Hiçbir route prerender edilmez
         },
-        preset: 'cloudflare'
+        preset: 'cloudflare',
+        output: {
+            publicDir: 'dist',
+        },
     },
 
     runtimeConfig: {
