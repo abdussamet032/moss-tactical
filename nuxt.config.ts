@@ -15,11 +15,11 @@ export default defineNuxtConfig({
     // Server-side (private) environment variables
     openaiApiKey: process.env.OPENAI_API_KEY,
     public: {
-      supabaseUrl: 'https://tffakpklfsvcmoskekgt.supabase.co',
-      supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmZmFrcGtsZnN2Y21vc2tla2d0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczNDQ4NTM0MywiZXhwIjoyMDUwMDYxMzQzfQ.u-ijQoG52FpW8_KU8K145Qsq0EdI7Tw16L5d1jTKEZM',
-      iyzicoApiKey: 'sandbox-NWmx8ksHNh7WvncF46PASsgHuCBowrqa',
-      iyzicoSecretKey: 'sandbox-ok4FiGlnfgmWa0EdkW0Em6Gdu9hFBPC4',
-      iyzicoBaseUrl: 'https://sandbox-api.iyzipay.com'
+      supabaseUrl: process.env.SUPABASE_URL,
+      supabaseAnonKey: process.env.SUPABASE_ANON_KEY,
+      iyzicoApiKey: process.env.IYZICO_API_KEY,
+      iyzicoSecretKey: process.env.IYZICO_SECRET_KEY,
+      iyzicoBaseUrl: process.env.IYZICO_BASE_URL
     }
   }
 })
