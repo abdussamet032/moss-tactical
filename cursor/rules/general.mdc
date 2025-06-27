@@ -1,0 +1,155 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+1. Kod Yazım Kuralları
+Her yazılan fonksiyon, bileşen veya yapı context7 mcp kullanılarak yazılmalıdır.
+
+📌 Bu kural zorunludur ve tüm kod parçaları için geçerlidir.
+
+Kodlar, kullanılan teknolojilerin güncel resmi dökümantasyonlarına uygun olarak yazılmalıdır
+
+
+İsimlendirme ve Stil
+Tüm değişken, fonksiyon ve dosya isimleri, ilgili teknolojinin dökümantasyonunda önerilen formatta yazılmalıdır (örneğin camelCase veya PascalCase).
+
+Kod temizliği ve okunabilirliği ön planda tutulmalıdır.
+
+Açıklamalar (Yorum Satırları)
+Yalnızca gerekli ve anlaşılması zor kod bloklarında açıklama yapılmalıdır.
+
+Açıklamalar mutlaka Türkçe ve açıklayıcı olmalıdır.
+
+Aşağıdaki gibi yazılabilir:
+// Bu fonksiyon, Supabase üzerinden kullanıcı bilgilerini context7 mcp ile getirir.
+
+Geliştirme Mantığı
+Her yazılan yapı, sistemdeki tüm akışları ve state'leri context7 mcp üzerinden anlamlandırmalı ve bu bağlamla işlem yapmalıdır.
+
+Kod yazımında sadece görev odaklı değil, bağlam odaklı yaklaşım benimsenmelidir.
+
+---
+
+# 2. Refactor Kuralları - Outdoor Tactical Shop (Nuxt 3 + TypeScript + Tailwind CSS + Supabase)
+
+## 2.1. Genel Prensipler
+- **Context7 mcps**: Her fonksiyon, bileşen veya helper yazımında `context7` kullan ve maks. 7 MCPs dâhil et.
+- **Türkçe yorumlar**: Açıklayıcı, satır‑içi veya blok; gereksiz ayrıntı yok, net ve proje kapsamında.
+- **Güncel dokümantasyon**: Nuxt 3, Supabase, Tailwind v3.4, TypeScript 5.5 referans alın.
+- **Kod yapısı**: `<script setup lang="ts">` + Composition API; options API kullanma.
+- **Atomic PR mantığı**: Her refactor kuralı tek commit ve tek amaca hizmet eder.
+
+## 2.2. Dosya & Dizin Standartları
+```
+./components/        # Presentational (UI) bileşenler
+./composables/       # Re‑usable logic (useX pattern)
+./pages/             # Route‑level, serverSearch param guardlı
+./assets/
+  └── images/        # Ürün foto & illüstrasyon
+./utils/             # Pure yardımcı fonksiyonlar
+./types/             # shared *.d.ts arabirimleri
+```
+- **Bileşen isimleri** PascalCase, dosya adı bileşen adıyla aynı.
+- **Karmaşık bileşen** → `ComponentName/` klasörü (index.vue + alt parçalar).
+
+## 2.3. Tailwind Tasarım Tokenları
+### Renk Paleti (main.css referansı)
+- Primary: `#475D3A` (koyu yeşil)
+- Primary Hover: `#3E5233`
+- Accent: `#C47B2A` (turuncu)
+- Neutral: `900: #1C1D1A`, `700: #4B4C47`, `200: #E8E9E5`, `50: #F9FAF9`
+- Success: `#2F855A`
+- Warning: `#D69E2E`
+
+### Tasarım Kuralları
+- Kart ve butonlar `rounded-2xl` veya `rounded-xl`.
+- Arkaplan renginde **neutral‑50**, kart zemininde **neutral‑200** kullan.
+- Primary buton hover'da **primary-hover**.
+- Mikro etkileşimler: `hover:scale-[1.02]`, `active:scale-95`, `transition-all duration-200 ease-out`.
+
+## 2.4. Bileşen Refactor Kuralları
+### Button Bileşeni
+- **Slot** tabanlı (icon+label). Props: `variant` (`primary|ghost|link|accent`), `loading` (bool).
+- Primary: `bg-primary text-white`; Accent: `bg-accent text-white`.
+- Loading → `<IconSpinner class="animate-spin" />`.
+
+### ProductCard Bileşeni
+- Görselin aspect‑video orantı korunsun, `object-cover`.
+- `Hover` → shadow değişimi + %2 ölçek.
+- Fiyat `<span>` bold, `text-xl`.
+
+### Header Bileşeni
+- Sticky top; `backdrop-blur` + `bg-neutral-50/80`.
+- Mobile menü `v-show` değil `v-if` & CSS `slide-y` anim.
+
+### Checkout Adımları
+- `useStepper()` composable; adım bilgisini `route.query.step` ile sync et.
+- Her adım bileşeni lazy‑import (`defineAsyncComponent`).
+
+## 2.5. State & Veri Katmanı
+- **Supabase**: Auth + product table (RLS)
+- `~/supabase/client.ts` üzerinden singleton.
+- SWR‑stale('server') stratejisi için `@vueuse/core` & `useAsyncState`.
+- `useCart()` composable → pinia değil, localStorage + server sync.
+
+## 2.6. Test & Kalite
+- **Vitest** + **Vue Test Utils**: set‑up dosyasında `createTestingPinia`.
+- **ESLint**: `@nuxt/eslint-config-typescript` + `plugin:tailwindcss/recommended`.
+- Pre‑commit `lint-staged` → eslint fix + `tailwindcss --minify`.
+
+## 2.7. Refactor Adım Adım
+1. `git checkout -b chore/refactor‑ui‑tokens` → Tailwind config eklenir.
+2. `git checkout -b feat/components‑base` → Button & ProductCard.
+3. `git checkout -b feat/layout‑header` → Header + Navigation.
+4. `git checkout -b feat/page‑home` → Hero, kategori grid.
+5. Sırasıyla checkout, account vs.
+
+> **Her adımda:** context7 comment bloğu ile özet, PR başlığı Türkçe.
+
+## 2.8. Örnek Kod Şablonları
+
+### Supabase Database İşlemi
+```ts
+/* context7: db-insert-product @mcps=5 */
+import { supabase } from '~/supabase/client'
+
+export async function insertProduct(product: ProductForm) {
+  const { data, error } = await supabase
+    .from('products')
+    .insert([product])
+    .select('*')
+    .single()
+  if (error) throw error
+  return data
+}
+```
+
+### Vue Bileşen Şablonu
+```vue
+<script setup lang="ts">
+/* context7: product-card @mcps=7 */
+const props = defineProps<{ product: Product }>()
+</script>
+
+<template>
+  <article class="bg-neutral-200 rounded-2xl shadow-card hover:shadow-cardHover transition-all duration-200 hover:scale-[1.02] flex flex-col">
+    <img :src="product.image" :alt="product.name" class="rounded-t-2xl aspect-video object-cover" />
+    <div class="p-6 flex-1 flex flex-col">
+      <h3 class="text-2xl font-semibold mb-2">{{ product.name }}</h3>
+      <p class="text-sm text-neutral-700 flex-1">{{ product.short_desc }}</p>
+      <div class="mt-4 flex justify-between items-center">
+        <span class="text-xl font-bold">₺{{ product.price }}</span>
+        <Button @click="addToCart(product)" variant="primary">Sepete Ekle</Button>
+      </div>
+    </div>
+  </article>
+</template>
+```
+
+## 2.9. Done Checklist (Pull Request Template)
+- [ ] Tasarım tokenları uygulandı
+- [ ] Testler geçti (`pnpm test`)
+- [ ] ESLint & format hatası yok
+- [ ] Türkçe yorumlar eklendi (gerekli yerlerde)
+- [ ] context7 blokları eksiksiz

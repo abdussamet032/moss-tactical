@@ -1,81 +1,25 @@
+// https://nuxt.com/docs/api/configuration/nuxt-config
+import tailwindcss from "@tailwindcss/vite";
+
 export default defineNuxtConfig({
-    devtools: {enabled: true},
+  compatibilityDate: '2024-11-01',
+  devtools: { enabled: true },
 
-    modules: [
-        '@nuxtjs/tailwindcss',
-        '@nuxtjs/supabase',
-        '@nuxt/image',
-        '@nuxt/icon'
-    ],
-
+  css: ['~/assets/css/main.css'],
+  vite: {
     plugins: [
-        {src: '~/plugins/maska.client.ts', mode: 'client'}
+      tailwindcss(),
     ],
-
-    css: ['~/assets/css/main.css'],
-
-    app: {
-        head: {
-            charset: 'utf-8',
-            viewport: 'width=device-width, initial-scale=1',
-        }
-    },
-
-    image: {
-        provider: 'ipx',
-        quality: 80,
-        format: ['webp'],
-        screens: {
-            xs: 320,
-            sm: 640,
-            md: 768,
-            lg: 1024,
-            xl: 1280,
-            xxl: 1536,
-        }
-    },
-
-    nitro: {
-        compressPublicAssets: true,
-        prerender: {
-            routes: [] // Hiçbir route prerender edilmez
-        },
-        preset: 'cloudflare',
-        output: {
-            publicDir: 'dist',
-        },
-    },
-
-    runtimeConfig: {
-        public: {
-            SUPABASE_URL: process.env.SUPABASE_URL,
-            SUPABASE_KEY: process.env.SUPABASE_KEY
-        }
-    },
-
-    supabase: {
-        url: process.env.SUPABASE_URL,
-        key: process.env.SUPABASE_KEY,
-        redirectOptions: {
-            login: '/auth/login',
-            callback: '/confirm',
-            exclude: ['/*'],
-        }
-    },
-
-    routeRules: {
-        // SPA geçişleri için
-        '/': {prerender: true},
-        '/products/**': {swr: 3600},
-        '/categories/**': {swr: 3600},
-    },
-
-    tailwindcss: {
-        cssPath: '~/assets/css/main.css',
-        configPath: 'tailwind.config.js',
-        exposeConfig: false,
-        viewer: true,
-    },
-
-    compatibilityDate: '2024-12-21',
+  },
+  runtimeConfig: {
+    // Server-side (private) environment variables
+    openaiApiKey: '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',
+    public: {
+      supabaseUrl: 'https://tffakpklfsvcmoskekgt.supabase.co',
+      supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmZmFrcGtsZnN2Y21vc2tla2d0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczNDQ4NTM0MywiZXhwIjoyMDUwMDYxMzQzfQ.u-ijQoG52FpW8_KU8K145Qsq0EdI7Tw16L5d1jTKEZM',
+      iyzicoApiKey: 'sandbox-NWmx8ksHNh7WvncF46PASsgHuCBowrqa',
+      iyzicoSecretKey: 'sandbox-ok4FiGlnfgmWa0EdkW0Em6Gdu9hFBPC4',
+      iyzicoBaseUrl: 'https://sandbox-api.iyzipay.com'
+    }
+  }
 })

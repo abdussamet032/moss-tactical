@@ -1,7 +1,0 @@
-name = "moss-tactical"
-main = "./dist/server/server.mjs"
-compatibility_date = "2024-12-21"
-
-[vars]
-SUPABASE_URL = "https://tffakpklfsvcmoskekgt.supabase.co"
-SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmZmFrcGtsZnN2Y21vc2tla2d0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ0ODUzNDMsImV4cCI6MjA1MDA2MTM0M30.i3XbAW5efO3ZcObR8A7uoihlAaSzazpqzZoJFNJdERU"

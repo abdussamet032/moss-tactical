@@ -10,19 +10,17 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "maska": "^2.1.11",
-    "nuxt": "^3.14.1592",
-    "vue": "latest",
-    "vue-router": "latest"
+    "@headlessui/vue": "^1.7.23",
+    "@heroicons/vue": "^2.2.0",
+    "@supabase/supabase-js": "^2.49.8",
+    "@tailwindcss/vite": "^4.1.10",
+    "gsap": "^3.13.0",
+    "iyzipay": "^2.0.64",
+    "nuxt": "^3.16.0",
+    "openai": "^4.67.1",
+    "tailwindcss": "^4.1.10",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
-  "devDependencies": {
-    "@iconify-json/heroicons": "^1.2.2",
-    "@nuxt/icon": "^1.10.3",
-    "@nuxt/image": "^1.8.1",
-    "@nuxtjs/supabase": "^1.4.4",
-    "@nuxtjs/tailwindcss": "^6.12.2",
-    "@types/papaparse": "^5.3.15",
-    "i": "^0.3.7"
-  }
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

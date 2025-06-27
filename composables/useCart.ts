@@ -1,145 +1,169 @@
-import { ref, computed, onMounted } from 'vue'
-import type { CartItem, AddToCartPayload } from '~/types/cart'
+/* context7: cart-management @mcps=7 */
+
+interface CartItem {
+  id: string
+  name: string
+  slug: string
+  price: number
+  image: string
+  quantity: number
+}
 
 export const useCart = () => {
-  // Sepet ürünleri için reactive state
   const cartItems = ref<CartItem[]>([])
+  const isLoading = ref(false)
 
-  /**
-   * LocalStorage'dan sepeti yükle
-   */
-  const loadCart = (): void => {
-    try {
-      const storedCart = localStorage.getItem('cart')
-      if (storedCart) {
-        cartItems.value = JSON.parse(storedCart)
+  // Sepet verilerini localStorage'dan yükle
+  const loadCart = () => {
+    if (process.client) {
+      try {
+        const stored = localStorage.getItem('cart')
+        if (stored) {
+          cartItems.value = JSON.parse(stored)
+        }
+      } catch (error) {
+        console.error('Sepet yükleme hatası:', error)
+        cartItems.value = []
       }
-    } catch (error) {
-      console.error('Sepet yüklenirken hata oluştu:', error)
-      cartItems.value = []
     }
   }
 
-  /**
-   * Sepeti LocalStorage'a kaydet
-   */
-  const saveCart = (): void => {
-    try {
-      localStorage.setItem('cart', JSON.stringify(cartItems.value))
-    } catch (error) {
-      console.error('Sepet kaydedilirken hata oluştu:', error)
+  // Sepet verilerini localStorage'a kaydet
+  const saveCart = () => {
+    if (process.client) {
+      try {
+        localStorage.setItem('cart', JSON.stringify(cartItems.value))
+        // Global sepet sayısını güncelle
+        refreshCookie('cart-count')
+      } catch (error) {
+        console.error('Sepet kaydetme hatası:', error)
+      }
     }
   }
 
-  /**
-   * Sepete ürün ekle
-   */
-  const addToCart = (item: AddToCartPayload): void => {
+  // Ürünü sepete ekle
+  const addToCart = (product: any, quantity: number = 1) => {
+    isLoading.value = true
+    
     try {
-      // Ürün verilerini kontrol et
-      if (!item.product_id || !item.size_id) {
-        throw new Error('Geçersiz ürün bilgisi')
-      }
-
-      // Aynı ürün ve beden var mı kontrol et
-      const existingItemIndex = cartItems.value.findIndex(
-        cartItem => cartItem.product_id === item.product_id && 
-                   cartItem.size_id === item.size_id
-      )
-
-      if (existingItemIndex !== -1) {
-        // Varsa miktarı artır
-        cartItems.value[existingItemIndex].quantity += item.quantity
+      const existingItem = cartItems.value.find(item => item.id === product.id)
+      
+      if (existingItem) {
+        existingItem.quantity += quantity
       } else {
-        // Yoksa yeni ürün ekle
         cartItems.value.push({
-          id: `${item.product_id}-${item.size_id}`,
-          ...item
+          id: product.id,
+          name: product.name,
+          slug: product.slug,
+          price: product.price,
+          image: product.image,
+          quantity
         })
       }
-
-      // Sepeti kaydet
+      
       saveCart()
+      return true
     } catch (error) {
-      console.error('Ürün sepete eklenirken hata oluştu:', error)
-      throw error
+      console.error('Sepete ekleme hatası:', error)
+      return false
+    } finally {
+      isLoading.value = false
     }
   }
 
-  /**
-   * Sepetten ürün çıkar
-   */
-  const removeFromCart = (itemId: string): void => {
+  // Ürünü sepetten çıkar
+  const removeFromCart = (productId: string) => {
+    isLoading.value = true
+    
     try {
-      cartItems.value = cartItems.value.filter(item => item.id !== itemId)
+      cartItems.value = cartItems.value.filter(item => item.id !== productId)
       saveCart()
+      return true
     } catch (error) {
-      console.error('Ürün sepetten çıkarılırken hata oluştu:', error)
-      throw error
+      console.error('Sepetten çıkarma hatası:', error)
+      return false
+    } finally {
+      isLoading.value = false
     }
   }
 
-  /**
-   * Ürün miktarını güncelle
-   */
-  const updateQuantity = (itemId: string, quantity: number): void => {
+  // Ürün miktarını güncelle
+  const updateQuantity = (productId: string, quantity: number) => {
+    isLoading.value = true
+    
     try {
-      if (quantity < 1) {
-        throw new Error('Geçersiz miktar')
+      if (quantity <= 0) {
+        return removeFromCart(productId)
       }
-
-      const item = cartItems.value.find(item => item.id === itemId)
+      
+      const item = cartItems.value.find(item => item.id === productId)
       if (item) {
         item.quantity = quantity
         saveCart()
+        return true
       }
+      return false
     } catch (error) {
-      console.error('Ürün miktarı güncellenirken hata oluştu:', error)
-      throw error
+      console.error('Miktar güncelleme hatası:', error)
+      return false
+    } finally {
+      isLoading.value = false
     }
   }
 
-  /**
-   * Sepeti temizle
-   */
-  const clearCart = (): void => {
+  // Sepeti temizle
+  const clearCart = () => {
+    isLoading.value = true
+    
     try {
       cartItems.value = []
       saveCart()
+      return true
     } catch (error) {
-      console.error('Sepet temizlenirken hata oluştu:', error)
-      throw error
+      console.error('Sepet temizleme hatası:', error)
+      return false
+    } finally {
+      isLoading.value = false
     }
   }
 
-  /**
-   * Toplam ürün sayısı
-   */
-  const totalItems = computed((): number => {
+  // Toplam ürün sayısı
+  const totalItems = computed(() => {
     return cartItems.value.reduce((total, item) => total + item.quantity, 0)
   })
 
-  /**
-   * Toplam fiyat
-   */
-  const totalPrice = computed((): number => {
+  // Toplam fiyat
+  const totalPrice = computed(() => {
     return cartItems.value.reduce((total, item) => total + (item.price * item.quantity), 0)
   })
 
-  // Sayfa yüklendiğinde sepeti yükle
+  // Sepette ürün var mı kontrol et
+  const isInCart = (productId: string) => {
+    return cartItems.value.some(item => item.id === productId)
+  }
+
+  // Ürünün sepetteki miktarını al
+  const getQuantity = (productId: string) => {
+    const item = cartItems.value.find(item => item.id === productId)
+    return item ? item.quantity : 0
+  }
+
+  // Component mount edildiğinde sepeti yükle
   onMounted(() => {
     loadCart()
   })
 
-  // Public API
   return {
-    items: cartItems,
+    cartItems: readonly(cartItems),
+    isLoading: readonly(isLoading),
+    totalItems,
+    totalPrice,
     addToCart,
     removeFromCart,
     updateQuantity,
     clearCart,
-    loadCart,
-    totalItems,
-    totalPrice
+    isInCart,
+    getQuantity,
+    loadCart
   }
-}
+} 

@@ -1,20 +1,30 @@
-export interface CartItem {
+export interface Cart {
   id: string
-  product_id: string
-  name: string
-  price: number
-  size: string
-  size_id: string
-  quantity: number
-  image_url: string
+  user_id?: string | null
+  created_at?: string | null
 }
 
-export interface AddToCartPayload {
-  product_id: string
-  name: string
-  price: number
-  size: string
-  size_id: string
+export interface CartItem {
+  id: string
+  cart_id?: string | null
+  variant_id?: string | null
   quantity: number
-  image_url: string
+}
+
+export interface CreateCartDto {
+  user_id?: string
+}
+
+export interface CreateCartItemDto {
+  cart_id: string
+  variant_id: string
+  quantity: number
+}
+
+export interface UpdateCartItemDto {
+  quantity: number
+}
+
+export interface CartWithItems extends Cart {
+  items: CartItem[]
 } 

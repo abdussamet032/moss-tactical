@@ -1,23 +1,26 @@
 <template>
   <div>
-    <Header />
-    <NuxtPage />
-    <Footer />
+    <BaseLoading :isVisible="isLoading" />
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
   </div>
 </template>
 
-<script setup lang="ts">
-useHead({
-  title: 'Modern E-Ticaret',
-  titleTemplate: '%s | Modern E-Ticaret',
-  meta: [
-    { name: 'description', content: 'Modern ve hızlı alışveriş deneyimi' },
-    { name: 'format-detection', content: 'telephone=no' },
-    { property: 'og:site_name', content: 'Modern E-Ticaret' },
-    { property: 'og:type', content: 'website' },
-  ],
-  link: [
-    { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-  ]
+<script setup>
+const isLoading = ref(false)
+
+// Nuxt'ın kendi loading state'ini dinle
+const nuxtApp = useNuxtApp()
+
+nuxtApp.hook('page:start', () => {
+  isLoading.value = true
+})
+
+nuxtApp.hook('page:finish', () => {
+  // Sayfa yüklendikten sonra kısa bir delay ile loading'i kapat
+  setTimeout(() => {
+    isLoading.value = false
+  }, 300)
 })
 </script>

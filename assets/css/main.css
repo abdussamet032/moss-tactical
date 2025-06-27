@@ -1,3 +1,88 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* context7: outdoor-tactical-theme-colors @mcps=7 */
+@theme {
+  /* Primary Colors - Koyu Yeşil Palet */
+  --color-primary: #475D3A; 
+  --color-primary-50: #F7F9F6;
+  --color-primary-100: #EBF1E8;
+  --color-primary-200: #D7E3D1;
+  --color-primary-300: #B8C8AA;
+  --color-primary-400: #93A87C;
+  --color-primary-500: #475D3A; /* Ana renk */
+  --color-primary-600: #3E5233; /* Hover rengi */
+  --color-primary-700: #344127;
+  --color-primary-800: #2A331F;
+  --color-primary-900: #1F2517;
+  --color-primary-950: #151912;
+
+  /* Primary Hover */
+  --color-primary-hover: #3E5233;
+
+  /* Accent Colors - Turuncu Palet */
+  --color-accent-50: #FDF8F3;
+  --color-accent-100: #FBF0E6;
+  --color-accent-200: #F6DCC7;
+  --color-accent-300: #F0C39E;
+  --color-accent-400: #E8A26A;
+  --color-accent-500: #C47B2A; /* Ana renk */
+  --color-accent-600: #B06B24;
+  --color-accent-700: #945A1F;
+  --color-accent-800: #78491A;
+  --color-accent-900: #5C3814;
+  --color-accent-950: #3D260E;
+
+  /* Neutral Colors */
+  --color-neutral-50: #F9FAF9;
+  --color-neutral-100: #F2F3F1;
+  --color-neutral-200: #E8E9E5;
+  --color-neutral-300: #D0D2CC;
+  --color-neutral-400: #A8ABA4;
+  --color-neutral-500: #82857E;
+  --color-neutral-600: #6B6E67;
+  --color-neutral-700: #4B4C47;
+  --color-neutral-800: #35362D;
+  --color-neutral-900: #1C1D1A;
+  --color-neutral-950: #0F100E;
+
+  /* Status Colors */
+  --color-success-50: #F0F9F5;
+  --color-success-100: #DCF2E8;
+  --color-success-200: #BBE4D1;
+  --color-success-300: #8ACFB0;
+  --color-success-400: #52B388;
+  --color-success-500: #2F855A; /* Ana renk */
+  --color-success-600: #276749;
+  --color-success-700: #22543D;
+  --color-success-800: #1E4532;
+  --color-success-900: #1A3A2A;
+  --color-success-950: #0F2419;
+
+  --color-warning-50: #FDF8F0;
+  --color-warning-100: #FBF0DB;
+  --color-warning-200: #F6DDB7;
+  --color-warning-300: #F0C688;
+  --color-warning-400: #E8A957;
+  --color-warning-500: #D69E2E; /* Ana renk */
+  --color-warning-600: #C6852A;
+  --color-warning-700: #B46D26;
+  --color-warning-800: #975822;
+  --color-warning-900: #7A451E;
+  --color-warning-950: #4D2D14;
+
+  --color-error-50: #FEF2F2;
+  --color-error-100: #FEE2E2;
+  --color-error-200: #FECACA;
+  --color-error-300: #FCA5A5;
+  --color-error-400: #F87171;
+  --color-error-500: #EF4444;
+  --color-error-600: #DC2626;
+  --color-error-700: #B91C1C;
+  --color-error-800: #991B1B;
+  --color-error-900: #7F1D1D;
+  --color-error-950: #450A0A;
+
+  /* White & Black */
+  --color-white: #ffffff;
+  --color-black: #000000;
+}
